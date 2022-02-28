@@ -34,3 +34,7 @@ export const updateCourseApi= (course)=>{
         }
     })
 }
+
+export const getCourseApi = (courseId) => {
+    
+}
