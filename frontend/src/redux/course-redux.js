@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { createCourseAPI, deleteCourseAPI, updateCourseApi } from './api'
+import { createCourseAPI, deleteCourseAPI, updateCourseApi, getCourseApi, getCoursesApi } from './api'
 
 export const createCourse = createAsyncThunk(
     'createCourse',
@@ -55,7 +55,7 @@ export const deleteCourse = createAsyncThunk(
 export const getCourse = createAsyncThunk(
     'getCourse',
     async (course_id, thunkAPI) => {
-        const response = await createCourseAPI(course_id).catch(error => {
+        const response = await getCourseApi(course_id).catch(error => {
             return error.response;
         })
 
@@ -69,8 +69,27 @@ export const getCourse = createAsyncThunk(
 
 )
 
+export const getCourses = createAsyncThunk(
+    'getCourse',
+    async (course_id, thunkAPI) => {
+        const response = await getCoursesApi().catch(error => {
+            return error.response;
+        })
+
+
+        if (response.status !== 200) {
+            return thunkAPI.rejectWithValue(response);
+        }
+
+        return response
+    }
+
+)
+
+
+
 const initialState =  {
-    course:{},
+    courses:[],
     loading: false,
     errors: []
 }
@@ -87,7 +106,7 @@ const courseSlice = createSlice({
 		// Add reducers for additional action types here, and handle loading state as needed
 		builder.addCase(createCourse.fulfilled, (state, action) => {
 			// Add user to the state array
-			state.course = action.payload.data.course
+			state.courses = [action.payload.data.course]
 			state.token = action.payload.data.token
 			state.loading = false
 			state.errors = initialState.errors
@@ -102,7 +121,7 @@ const courseSlice = createSlice({
 			state.loading = true
 		}),
 		builder.addCase(updateCourse.fulfilled, (state, action) => {
-			state.course = action.payload.data.course
+			state.courses = [action.payload.data.course]
 			state.token = action.payload.data.token
 			state.loading = false
 			state.errors = initialState.errors
@@ -111,6 +130,48 @@ const courseSlice = createSlice({
 			state.loading = true
 		}),
 		builder.addCase(updateCourse.rejected, (state, action) => {
+			// Add user to the state array
+			state.errors = action.payload.data.errors
+			state.loading = false
+		}),
+        builder.addCase(deleteCourse.fulfilled, (state, action) => {
+			state.courses = [action.payload.data.course]
+			state.token = action.payload.data.token
+			state.loading = false
+			state.errors = initialState.errors
+		}),
+		builder.addCase(deleteCourse.pending, (state) => {
+			state.loading = true
+		}),
+		builder.addCase(deleteCourse.rejected, (state, action) => {
+			// Add user to the state array
+			state.errors = action.payload.data.errors
+			state.loading = false
+		}),
+        builder.addCase(getCourse.fulfilled, (state, action) => {
+			state.courses = [action.payload.data.course]
+			state.token = action.payload.data.token
+			state.loading = false
+			state.errors = initialState.errors
+		}),
+		builder.addCase(getCourse.pending, (state) => {
+			state.loading = true
+		}),
+		builder.addCase(getCourse.rejected, (state, action) => {
+			// Add user to the state array
+			state.errors = action.payload.data.errors
+			state.loading = false
+		}),
+        builder.addCase(getCourses.fulfilled, (state, action) => {
+			state.courses = action.payload.data.courses
+			state.token = action.payload.data.token
+			state.loading = false
+			state.errors = initialState.errors
+		}),
+		builder.addCase(getCourses.pending, (state) => {
+			state.loading = true
+		}),
+		builder.addCase(getCourses.rejected, (state, action) => {
 			// Add user to the state array
 			state.errors = action.payload.data.errors
 			state.loading = false
