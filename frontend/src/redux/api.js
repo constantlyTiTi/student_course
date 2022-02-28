@@ -36,5 +36,17 @@ export const updateCourseApi= (course)=>{
 }
 
 export const getCourseApi = (courseId) => {
-    
+    return axios.get("/course/${courseId}",{
+        headers:{
+            "Content-Type": "Application/json"
+        }
+    })
+}
+
+export const getCoursesApi = () => {
+    return axios.get("/course/courses",{
+        headers:{
+            "Content-Type": "Application/json"
+        }
+    })
 }
