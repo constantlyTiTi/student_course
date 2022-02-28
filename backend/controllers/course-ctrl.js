@@ -32,7 +32,7 @@ createCourse = (req, res) => {
 }
 
 getCourse = (req, res) => {
-    await Course.findOne({ _id: req.params.id }, (err, course) => {
+    await Course.findOne({ _id: req.params.courseId }, (err, course) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
         }
@@ -81,7 +81,7 @@ updateCourse = (req, res) => {
         })
     }
 
-    Course.findOne({ _id: req.params.id }, (err, course) => {
+    Course.findOne({ _id: req.params.courseId }, (err, course) => {
         if (err) {
             return res.status(404).json({
                 err,
