@@ -18,7 +18,7 @@ function App() {
             <Route path="/" element={<CourseList/>}/>
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
-            <Route path="/course/:code" element={<Course />}/>
+            <Route path="/course/:course_id" element={<Course />}/>
             {/* <Route path="/course-list" element={<CourseList/>}/> */}
             <Route path="thankyou" element={<Thankyou/>}/>
           </Route>
@@ -33,7 +33,7 @@ function Layout() {
     <>
       <Navbar bg="dark" variant="dark">
         <Container>
-          <Navbar.Brand href="/">Login</Navbar.Brand>
+          <Navbar.Brand href="/login">Login</Navbar.Brand>
           <Navbar.Brand href="/signup">Sign up</Navbar.Brand>
           <Nav path="course-list" element={<CourseList/>}/>
           <Nav className="me-auto">

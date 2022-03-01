@@ -72,16 +72,12 @@ export const getCourse = createAsyncThunk(
 export const getCourses = createAsyncThunk(
     'getCourses',
     async (course_code, thunkAPI) => {
-        const response = await getCoursesApi().catch(error => {
-            return error.response;
-        })
-
+        const response = await getCoursesApi()
 
         if (response.status !== 200) {
             return thunkAPI.rejectWithValue(response);
         }
-
-        return response
+        return response.data
     }
 
 )
@@ -124,7 +120,7 @@ const courseSlice = createSlice({
 		// Add reducers for additional action types here, and handle loading state as needed
 		builder.addCase(createCourse.fulfilled, (state, action) => {
 			// Add user to the state array
-			state.courses = [action.payload.data.course]
+			state.courses = [action.payload.data.data]
 			state.token = action.payload.data.token
 			state.loading = false
 			state.errors = initialState.errors
@@ -139,7 +135,7 @@ const courseSlice = createSlice({
 			state.loading = true
 		}),
 		builder.addCase(updateCourse.fulfilled, (state, action) => {
-			state.courses = [action.payload.data.course]
+			state.courses = [action.payload.data.data]
 			state.token = action.payload.data.token
 			state.loading = false
 			state.errors = initialState.errors
@@ -153,7 +149,7 @@ const courseSlice = createSlice({
 			state.loading = false
 		}),
         builder.addCase(deleteCourse.fulfilled, (state, action) => {
-			state.courses = [action.payload.data.course]
+			state.courses = [action.payload.data.data]
 			state.token = action.payload.data.token
 			state.loading = false
 			state.errors = initialState.errors
@@ -167,7 +163,7 @@ const courseSlice = createSlice({
 			state.loading = false
 		}),
         builder.addCase(getCourse.fulfilled, (state, action) => {
-			state.course = action.payload.data.course
+			state.course = action.payload.data.data
 			state.token = action.payload.data.token
 			state.loading = false
 			state.errors = initialState.errors
@@ -182,7 +178,7 @@ const courseSlice = createSlice({
 			state.loading = false
 		}),
         builder.addCase(getCourses.fulfilled, (state, action) => {
-			state.courses = action.payload.data.courses
+			state.courses = action.payload.data
 			state.token = action.payload.data.token
 			state.loading = false
 			state.errors = initialState.errors

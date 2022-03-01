@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Table, Button, FloatingLabel } from "react-bootstrap"
+import { Table, Button, FloatingLabel, Spinner } from "react-bootstrap"
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate ,Link, NavLink} from 'react-router-dom';
 import {getCourses} from '../redux/course-redux'
@@ -39,14 +39,19 @@ import {Course} from '../models/course'
 //   ];
 const CourseList =()=> {
     const courses = useSelector((state) => state.courses)
+    const loading = useSelector((state) => state.loading)
     const dispatch = useDispatch()
     const navigate = useNavigate()
-
+    console.log(courses, loading)
     useEffect (()=>{
-        dispatch(getCourses) 
+        dispatch(getCourses()) 
+        
 
     }, [])
 
+    if(!courses || loading){
+      return <Spinner animation="border" role="status" />
+    }
 
     return(
         <Table striped bordered hover size="sm">
