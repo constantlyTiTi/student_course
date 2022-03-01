@@ -3,28 +3,28 @@ import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom
 import Login from './auth/login'
 import SignUp from './auth/signup'
 import Course from './course/course'
+import CourseList from './course/courseList'
 import Thankyou from './course/thankyou'
 import { Container, Navbar, Nav, Link, Brand } from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
 function App() {
-
   return (
-
     <div className="App">
       <Router>
         <Routes>
-          <Route path="/" element={<Layout />}>
+          <Route element={<Layout />}>
             {/* <Route index element={<Items />} /> */}
-            <Route path="/" element={<Login />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="course" element={<Course/>}/>
-          <Route path="thankyou" element={<Thankyou/>}/>
-          </Route>
 
+            <Route path="/" element={<CourseList/>}/>
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/course/:code" element={<Course />}/>
+            {/* <Route path="/course-list" element={<CourseList/>}/> */}
+            <Route path="thankyou" element={<Thankyou/>}/>
+          </Route>
         </Routes>
       </Router>
     </div>
-
   );
 }
 
@@ -35,10 +35,12 @@ function Layout() {
         <Container>
           <Navbar.Brand href="/">Login</Navbar.Brand>
           <Navbar.Brand href="/signup">Sign up</Navbar.Brand>
+          <Nav path="course-list" element={<CourseList/>}/>
           <Nav className="me-auto">
           </Nav>
+          {/* <Nav path="course-list" element={<CourseList/>}/>
           <Nav path="course" element={<Course/>}/>
-          <Nav path="thankyou" element={<Thankyou/>}/>
+          <Nav path="thankyou" element={<Thankyou/>}/> */}
         </Container>
       </Navbar>
       <Container className='mt-3 col-5'>
