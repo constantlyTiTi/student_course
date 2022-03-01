@@ -92,19 +92,16 @@ getCourseList =async (req, res) => {
 }
 
 deleteCourse =async (req, res) => {
-    await Course.findOneAndDelete({ course_code: req.params.course_code }, (err, course) => {
-        if (err) {
-            return res.status(400).json({ success: false, error: err })
-        }
-
-        if (!course) {
+    Course.findOneAndDelete({course_code: req.params.course_code }, function (err, docs) {
+        if (err){
             return res
-                .status(404)
-                .json({ success: false, error: `Course not found` })
+                    .status(400)
+                    .json({ success: false, error: err })
         }
-
-        return res.status(200).json({ success: true, data: course })
-    }).catch(err => console.log(err))
+        else{
+            return res.status(200).json({ success: true, data: docs })
+        }
+    });
 }
 
 updateCourse =async (req, res) => {
