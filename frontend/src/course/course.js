@@ -30,7 +30,7 @@ const CourseInfor=(props) => {
 
     const formSubmit =(e)=>{
         e.preventDefault()
-        dispatch(setCourseInfo(userState))
+        dispatch(setCourseInfo(courseState))
         navigate("/course")
     }
 
@@ -38,12 +38,20 @@ const CourseInfor=(props) => {
         <Form onSubmit={e => formSubmit(e)}>
 
 
-                    <FloatingLabel label="Student number" className="mb-3" controlId="studentNumber">
-                        <Form.Control type="text" placeholder="student number"  onChange={e => setStudentNumber(e.target.value)} />
+                    <FloatingLabel label="Course code" className="mb-3" controlId="code">
+                        <Form.Control type="text" placeholder="student number"  onChange={e => setCourseCode(e.target.value)} />
                     </FloatingLabel>
 
-                    <FloatingLabel label="Password" className="mb-3"controlId="password">
-                        <Form.Control type="text" placeholder="password"  onChange={e => setPassword(e.target.value)} />
+                    <FloatingLabel label="Course name" className="mb-3"controlId="name">
+                        <Form.Control type="text" placeholder="password"  onChange={e => setCourseName(e.target.value)} />
+                    </FloatingLabel>
+
+                    <FloatingLabel label="Section" className="mb-3"controlId="section">
+                        <Form.Control type="text" placeholder="password"  onChange={e => setSection(e.target.value)} />
+                    </FloatingLabel>
+
+                    <FloatingLabel label="Semester" className="mb-3"controlId="semester">
+                        <Form.Control type="text" placeholder="password"  onChange={e => setSemester(e.target.value)} />
                     </FloatingLabel>
                 <Button variant="primary" type="submit">
                     Submit
