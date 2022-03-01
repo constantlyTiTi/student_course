@@ -3,7 +3,7 @@ const Student = require('../models/student')
 studentCourseList = async (req, res) => {
 
     try {
-        let result = await Student.findOne({ student_number: req.params.student_number })
+        let result = await Student.findOne({ _id: req.params.student_id })
         if (!result) {
             return res.status(400).json({ success: false, error: "not found" })
         }
@@ -17,15 +17,15 @@ studentCourseList = async (req, res) => {
 
 addCourseToStudent = async (req, res) => {
 
-    let student = await Student.findOne({ student_number: req.params.student_number })
+    let student = await Student.findOne({ _id: req.params.student_id })
 
-    if (student.courses.includes(req.params.course_code)) {
+    if (student.courses.includes(req.params.course_id)) {
         return res.status(400).json({
             message: 'Course already exist',
         })
     }
 
-    student.courses.push(req.params.course_code)
+    student.courses.push(req.params.course_id)
 
     await student.save()
         .then((item) => {

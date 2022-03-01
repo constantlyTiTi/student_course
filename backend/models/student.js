@@ -12,7 +12,7 @@ const Student = new Schema(
         email: { type: String, required: true },
         password: { type: String, required: true },
         program: { type: String, required: true },
-        courses:[{type:String}]
+        courses: [{type: mongoose.Schema.Types.ObjectId, ref:"course"}]
     },
     { timestamps: true },
 )

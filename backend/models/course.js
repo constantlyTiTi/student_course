@@ -7,7 +7,7 @@ const Course = new Schema(
         course_name: { type: String, required: true },
         section: { type: String, required: true },
         semester: { type: String, required: true },
-        students: [{type:String}]
+        students: [{type: mongoose.Schema.Types.ObjectId, ref:"student"}]
     },
     { timestamps: true },
 )
