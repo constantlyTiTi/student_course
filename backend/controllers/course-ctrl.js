@@ -32,13 +32,46 @@ createCourse = (req, res) => {
 }
 
 getCourse = (req, res) => {
-    await Course.findOne({ _id: req.params.courseId }, (err, course) => {
+    await Course.findOne({ course_code: req.params.course_code }, (err, course) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
         }
 
         return res.status(200).json({ success: true, data: course })
     }).catch(err => console.log(err))
+}
+
+addStudentToCourse = (req, res) => {
+    let courseGet = {}
+    await Course.findOne({ course_code: req.params.course_code, student_number:req.params.student_number}, (err, course) => {
+        if (err) {
+            return res.status(400).json({ success: false, error: err })
+        }
+        if(course.students.contains(student_number)){
+            return res.status(400).json({ success: false,  message: 'already exist' })
+        }
+       
+        course.students.push(student_number)
+        
+        course
+            .save()
+            .then(() => {
+                return res.status(200).json({
+                    success: true,
+                    id: course._id,
+                    message: 'Course updated!',
+                })
+            })
+            .catch(error => {
+                return res.status(404).json({
+                    error,
+                    message: 'Course not updated!',
+                })
+            })
+    }).catch(err => console.log(err))
+
+    courseGet.students.push(student_number)
+
 }
 
 getCourseList = (req, res) => {
@@ -56,7 +89,7 @@ getCourseList = (req, res) => {
 }
 
 deleteCourse = (req, res) => {
-    await Course.findOneAndDelete({ _id: req.params.id }, (err, course) => {
+    await Course.findOneAndDelete({ course_code: req.params.course_code }, (err, course) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
         }
@@ -116,5 +149,6 @@ module.exports = {
     getCourse,
     getCourseList,
     deleteCourse,
-    updateCourse
+    updateCourse,
+    addStudentToCourse
 }

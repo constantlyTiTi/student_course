@@ -1,8 +1,9 @@
 
-export default Course = 
+export const Course = 
     {
         course_code: "",
         course_name: "",
         section: "",
-        semester: ""
+        semester: "",
+        students:[]
     }

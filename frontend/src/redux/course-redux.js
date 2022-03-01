@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { createCourseAPI, deleteCourseAPI, updateCourseApi, getCourseApi, getCoursesApi } from './api'
+import { createCourseAPI, deleteCourseAPI, updateCourseApi, getCourseApi, getCoursesApi, addStudentToCourseApi } from './api'
 
 export const createCourse = createAsyncThunk(
     'createCourse',
@@ -37,8 +37,8 @@ export const updateCourse = createAsyncThunk(
 
 export const deleteCourse = createAsyncThunk(
     'deleteCourse',
-    async (course_id, thunkAPI) => {
-        const response = await deleteCourseAPI(course_id).catch(error => {
+    async (course_code, thunkAPI) => {
+        const response = await deleteCourseAPI(course_code).catch(error => {
             return error.response;
         })
 
@@ -54,8 +54,8 @@ export const deleteCourse = createAsyncThunk(
 
 export const getCourse = createAsyncThunk(
     'getCourse',
-    async (course_id, thunkAPI) => {
-        const response = await getCourseApi(course_id).catch(error => {
+    async (course_code, thunkAPI) => {
+        const response = await getCourseApi(course_code).catch(error => {
             return error.response;
         })
 
@@ -70,9 +70,26 @@ export const getCourse = createAsyncThunk(
 )
 
 export const getCourses = createAsyncThunk(
-    'getCourse',
-    async (course_id, thunkAPI) => {
+    'getCourses',
+    async (course_code, thunkAPI) => {
         const response = await getCoursesApi().catch(error => {
+            return error.response;
+        })
+
+
+        if (response.status !== 200) {
+            return thunkAPI.rejectWithValue(response);
+        }
+
+        return response
+    }
+
+)
+
+export const addStudentToCourse = createAsyncThunk(
+    'getCourses',
+    async (course_code,student_number, thunkAPI) => {
+        const response = await addStudentToCourseApi(course_code, student_number).catch(error => {
             return error.response;
         })
 
@@ -95,7 +112,7 @@ const initialState =  {
 }
 
 const courseSlice = createSlice({
-	name: "user",
+	name: "course",
 	initialState,
 	reducers: {
 		setCourseInfo: (state, action) => {

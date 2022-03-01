@@ -1,4 +1,4 @@
-export default Student = 
+export const Student = 
     {
         first_name:"",
         last_name: "",
@@ -8,6 +8,7 @@ export default Student =
         phone_number: "",
         email: "",
         program: "",
-        password:""
+        password:"",
+        courses:[]
     }
 

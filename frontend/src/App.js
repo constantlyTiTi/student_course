@@ -1,12 +1,11 @@
-import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
-import Login from './auth/Login'
+import Login from './auth/login'
+import SignUp from './auth/signup'
 import Course from './course/course'
-import Thankyou from './course/ThankYou'
+import Thankyou from './course/thankyou'
 import { Container, Navbar, Nav, Link, Brand } from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
-
 function App() {
 
   return (
@@ -17,7 +16,8 @@ function App() {
           <Route path="/" element={<Layout />}>
             {/* <Route index element={<Items />} /> */}
             <Route path="/" element={<Login />} />
-            <Route path="course" element={<Evaluate/>}/>
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="course" element={<Course/>}/>
           <Route path="thankyou" element={<Thankyou/>}/>
           </Route>
 
@@ -34,6 +34,7 @@ function Layout() {
       <Navbar bg="dark" variant="dark">
         <Container>
           <Navbar.Brand href="/">Login</Navbar.Brand>
+          <Navbar.Brand href="/signup">Sign up</Navbar.Brand>
           <Nav className="me-auto">
           </Nav>
           <Nav path="course" element={<Course/>}/>

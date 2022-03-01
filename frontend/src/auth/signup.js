@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { Form, Button, FloatingLabel } from "react-bootstrap"
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom';
-import {mapUser} from '../redux/UserSlice'
-import Student from '../models/student'
+import {setUserInfo} from '../redux/auth-redux'
+import {Student} from '../models/student'
 
 const SignUp = (props) => {
     const user = useSelector((state) => state.user.value)
@@ -15,6 +15,15 @@ const SignUp = (props) => {
     const setStudentNumber =(studentNumber)=>{
         setState({...userState, student_number:studentNumber})
     }
+
+    const setFirstname =(input)=>{
+        setState({...userState, first_name:input})
+    }
+
+    const setLastname =(input)=>{
+        setState({...userState, last_name:input})
+    }
+
 
     const setPassword = (passwordInput)=>{
         setState({...userState, password:passwordInput})
@@ -37,9 +46,14 @@ const SignUp = (props) => {
         setState({...userState, program:input})
         console.log(userState)
     }
+
+    const setEmail = (input)=>{
+        setState({...userState, email:input})
+        console.log(userState)
+    }
     const formSubmit =(e)=>{
         e.preventDefault()
-        dispatch(mapUser(userState))
+        dispatch(setUserInfo(userState))
         navigate("/course")
     }
 
@@ -53,6 +67,12 @@ const SignUp = (props) => {
 
                     <FloatingLabel label="Password" className="mb-3"controlId="password">
                         <Form.Control type="text" placeholder="password"  onChange={e => setPassword(e.target.value)} />
+                    </FloatingLabel>
+                    <FloatingLabel label="First name" className="mb-3" controlId="firstname">
+                        <Form.Control type="text" placeholder="first name"  onChange={e => setFirstname(e.target.value)} />
+                    </FloatingLabel>
+                    <FloatingLabel label="Last name" className="mb-3" controlId="lastname">
+                        <Form.Control type="text" placeholder="last name"  onChange={e => setLastname(e.target.value)} />
                     </FloatingLabel>
 
                     <FloatingLabel label="Address" className="mb-3" controlId="address">

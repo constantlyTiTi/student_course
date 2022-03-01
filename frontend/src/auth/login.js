@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { Form, Button, FloatingLabel } from "react-bootstrap"
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from 'react-router-dom';
-import {mapUser} from '../redux/UserSlice'
-import Student from '../models/student'
+import {setUserInfo} from '../redux/auth-redux'
+import {Student} from '../models/student'
 
 const Login = (props) => {
     const user = useSelector((state) => state.user.value)
@@ -23,7 +23,7 @@ const Login = (props) => {
 
     const formSubmit =(e)=>{
         e.preventDefault()
-        dispatch(mapUser(userState))
+        dispatch(setUserInfo(userState))
         navigate("/course")
     }
 
