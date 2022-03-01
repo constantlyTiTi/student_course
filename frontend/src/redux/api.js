@@ -20,8 +20,8 @@ export const createCourseAPI= (course)=>{
         }
     })
 }
-export const deleteCourseAPI= (course_code)=>{
-    return axios.delete(`/course/${course_code}`,{
+export const deleteCourseAPI= (course_id)=>{
+    return axios.delete(`/course/${course_id}`,{
         headers:{
             "Content-Type": "Application/json"
         }
@@ -35,8 +35,8 @@ export const updateCourseApi= (course)=>{
     })
 }
 
-export const getCourseApi = (course_code) => {
-    return axios.get(`/course/${course_code}`,{
+export const getCourseApi = (course_id) => {
+    return axios.get(`/course/${course_id}`,{
         headers:{
             "Content-Type": "Application/json"
         }
@@ -44,15 +44,15 @@ export const getCourseApi = (course_code) => {
 }
 
 export const getCoursesApi = () => {
-    return axios.get("/course/courses",{
+    return axios.get("/course/courses/all",{
         headers:{
             "Content-Type": "Application/json"
         }
     })
 }
 
-export const addStudentToCourseApi = (course_code, student_number) => {
-    return axios.put(`/course/${course_code}/student_number/${student_number}`,{
+export const addStudentToCourseApi = (course_id, student_id) => {
+    return axios.put(`/course/${course_id}/student_number/${student_id}`,{
         headers:{
             "Content-Type": "Application/json"
         }

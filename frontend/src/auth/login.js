@@ -11,7 +11,7 @@ const Login = (props) => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const location = useLocation()
-    let auth = useAuth()
+    // let auth = useAuth()
 
     const[userState, setState] = useState(Student)
 

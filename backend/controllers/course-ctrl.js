@@ -84,19 +84,48 @@ addStudentToCourse = async (req, res) => {
 
 }
 
-getCourseList =async (req, res) => {
+getCourseList = async (req, res) => {
+
+    Course.find().then(
+        items => {
+            if (!items.length) {
+                return res
+                    .status(404)
+                    .json({ success: false, error: `Course not found` })
+            }
+            res.status(200).json({ success: true, data: items })
+        }
+    ).catch(
+        err => console.log(err)
+    )
     
-    await Course.find({}, (err, items) => {
-        if (err) {
-            return res.status(400).json({ success: false, error: err })
-        }
-        if (!items.length) {
-            return res
-                .status(404)
-                .json({ success: false, error: `Course not found` })
-        }
-        return res.status(200).json({ success: true, data: items })
-    }).catch(err => console.log(err))
+    // Course.find({},(err,items)=>{
+    //     if(err){
+    //         res.status(400).json({ success: false, error: err })
+    //     }
+    //     if (!items.length) {
+    //         return res
+    //             .status(404)
+    //             .json({ success: false, error: `Course not found` })
+    //     }
+    //     res.status(200).json(items)
+    // }).catch(
+    //     err => console.log(err)
+    // )
+
+    // try{
+    //     let courses = Course.find()
+    //     console.log(courses)
+    //     if (!courses.length) {
+    //         return res
+    //             .status(404)
+    //             .json({ success: false, error: `Course not found` })
+    //     }
+    //     return res.status(200).json({ success: true, data: items })
+    // }
+    // catch(e){
+    //     res.status(400).json({ success: false, error: e })
+    // }
 
 }
 
