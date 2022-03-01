@@ -1,43 +1,30 @@
 import React, { useEffect, useState } from "react";
-import { Table, Button, FloatingLabel } from "react-bootstrap";
+import { Table, Button, FloatingLabel, Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Course } from "../models/course";
-
-const courses = [
-  {
-    code: "COMP01",
-    name: "COMP 01",
-    section: ["001", "002", "003"],
-    semester: "Semester 1",
-  },
-  {
-    code: "COMP02",
-    name: "COMP 02",
-    section: ["001", "002", "003"],
-    semester: "Semester 2",
-  },
-  {
-    code: "COMP03",
-    name: "COMP 03",
-    section: ["001", "002", "003"],
-    semester: "Semester 1",
-  },
-  {
-    code: "COMP04",
-    name: "COMP 04",
-    section: ["001", "002", "003"],
-    semester: "Semester 1",
-  },
-  {
-    code: "COMP05",
-    name: "COMP 05",
-    section: ["001", "002", "003"],
-    semester: "Semester 1",
-  },
-];
+import { getStudentCourses } from '../redux/course-redux'
 
 const SelectedCourses = () => {
+
+  const courses = useSelector((state) => state.course.courses)
+  const user = useSelector((state) => state.user.user)
+  const token = useSelector((state) => state.user.token)
+  const loading = useSelector((state) => state.course.loading)
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  console.log(user, loading)
+  useEffect(() => {
+    if (courses?.length === 0) {
+      dispatch(getStudentCourses(user._id, token))
+    }
+
+  }, [])
+
+  if (!courses || loading) {
+    return <Spinner animation="border" role="status" />
+  }
+
   return (
     <Table striped bordered hover size="sm">
       <thead>
@@ -51,9 +38,9 @@ const SelectedCourses = () => {
       <tbody>
         {courses.map((c) => (
           <tr>
-            <td>{c.code}</td>
-            <td>{c.name}</td>
-            <td>{c.section.join(" / ")}</td>
+            <td>{c.course_code}</td>
+            <td>{c.crouse_name}</td>
+            <td>{c.section}</td>
             <td>{c.semester}</td>
           </tr>
         ))}

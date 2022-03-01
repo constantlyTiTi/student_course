@@ -4,16 +4,17 @@ import { loginAPI, signUpAPI} from './api'
 export const login = createAsyncThunk(
     'login',
     async (userState, thunkAPI) => {
-        const response = await loginAPI(userState).catch(error => {
-            return error.response;
-        })
+        const response = await loginAPI(userState)
 
+		console.log(response.data)
 
         if (response.status !== 200) {
             return thunkAPI.rejectWithValue(response);
         }
 
-        return response
+		console.log(response.data)
+
+        return response.data
     }
 
 )
@@ -21,16 +22,14 @@ export const login = createAsyncThunk(
 export const register = createAsyncThunk(
     'register',
     async (userState, thunkAPI) => {
-        const response = await signUpAPI(userState).catch(error => {
-            return error.response;
-        })
+        const response = await signUpAPI(userState)
 
 
         if (response.status !== 200) {
             return thunkAPI.rejectWithValue(response);
         }
 
-        return response
+        return response.data
     }
 
 )
@@ -54,7 +53,7 @@ const userSlice = createSlice({
 		// Add reducers for additional action types here, and handle loading state as needed
 		builder.addCase(register.fulfilled, (state, action) => {
 			// Add user to the state array
-			state.user = action.payload.data.user
+			state.user = action.payload.data
 			state.token = action.payload.data.token
 			state.loading = false
 			state.errors = initialState.errors
@@ -69,8 +68,9 @@ const userSlice = createSlice({
 			state.loading = true
 		}),
 		builder.addCase(login.fulfilled, (state, action) => {
-			state.user = action.payload.data.user
-			state.token = action.payload.data.token
+			console.log(action.payload)
+			state.user = action.payload.student
+			state.token = action.payload.token
 			state.loading = false
 			state.errors = initialState.errors
 		}),

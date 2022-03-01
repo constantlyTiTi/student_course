@@ -1,6 +1,6 @@
 import axios from "axios"
 export const loginAPI = (userState)=>{
-    return axios.post("/auth/login",userState,{
+    return axios.post("/authen/login",userState,{
         headers:{
             "Content-Type": "Application/json"
         }
@@ -47,6 +47,15 @@ export const getCoursesApi = () => {
     return axios.get("/course/courses/all",{
         headers:{
             "Content-Type": "Application/json"
+        }
+    })
+}
+
+export const getStudentCoursesApi = (student_id, token) => {
+    return axios.get(`/student/${student_id}/studentCourseList`,{
+        headers:{
+            "Content-Type": "Application/json",
+            "Authentication":`Beare ${token}`
         }
     })
 }

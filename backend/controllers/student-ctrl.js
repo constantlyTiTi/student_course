@@ -1,5 +1,5 @@
 const Student = require('../models/student')
-
+const jwt = require("jsonwebtoken")
 studentCourseList = async (req, res) => {
     try{
         var token = req.headers.authorization.split(' ')[1];

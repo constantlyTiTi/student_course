@@ -7,7 +7,11 @@ import CourseList from './course/courseList'
 import Thankyou from './course/thankyou'
 import { Container, Navbar, Nav, Link, Brand } from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { useEffect, useState } from 'react'
+import {useSelector } from "react-redux";
+import SelectedCourses from './course/selectedCourses';
 function App() {
+  
   return (
     <div className="App">
       <Router>
@@ -18,6 +22,7 @@ function App() {
             <Route path="/" element={<CourseList/>}/>
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
+            <Route path="/selectedcourses" element={<SelectedCourses />} />
             <Route path="/course/:course_id" element={<Course />}/>
             {/* <Route path="/course-list" element={<CourseList/>}/> */}
             <Route path="thankyou" element={<Thankyou/>}/>
@@ -29,6 +34,31 @@ function App() {
 }
 
 function Layout() {
+  const user = useSelector((state) => state.user.user)
+  const token = useSelector((state) => state.user.token)
+  if(token){
+    return (
+      <>
+        <Navbar bg="dark" variant="dark">
+          <Container>
+            <Navbar.Brand href="/selectedcourses">{user.first_name} {user.last_name}</Navbar.Brand>
+            <Navbar.Brand href="/logout">log out</Navbar.Brand>
+            <Nav path="course-list" element={<CourseList/>}/>
+            <Nav className="me-auto">
+            </Nav>
+            {/* <Nav path="course-list" element={<CourseList/>}/>
+            <Nav path="course" element={<Course/>}/>
+            <Nav path="thankyou" element={<Thankyou/>}/> */}
+          </Container>
+        </Navbar>
+        <Container className='mt-3 col-5'>
+          {/* <h1>child</h1> */}
+          <Outlet />
+        </Container>
+  
+      </>
+    );
+  }
   return (
     <>
       <Navbar bg="dark" variant="dark">

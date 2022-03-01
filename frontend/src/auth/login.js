@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { Form, Button, FloatingLabel } from "react-bootstrap"
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate ,useLocation} from 'react-router-dom';
-import {setUserInfo} from '../redux/auth-redux'
+import {login} from '../redux/auth-redux'
 import {Student} from '../models/student'
 import {useAuth} from '../auth/useAuth'
 
 const Login = (props) => {
-    const user = useSelector((state) => state.user.value)
+    const user = useSelector((state) => state.user.user)
+    const token = useSelector((state) => state.user.token)
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const location = useLocation()
@@ -15,21 +16,26 @@ const Login = (props) => {
 
     const[userState, setState] = useState(Student)
 
+    useEffect(()=>{
+        if(token){
+            navigate(from, { replace: true });
+        }
+    },[token])
+
     const setStudentNumber =(studentNumber)=>{
         setState({...userState, student_number:studentNumber})
     }
 
     const setPassword = (passwordInput)=>{
         setState({...userState, password:passwordInput})
-        console.log(userState)
     }
     let from = location.state?.from?.pathname || "/";
     const formSubmit =(e)=>{
         e.preventDefault()
-        dispatch(setUserInfo(userState))
-        navigate(from, { replace: true });
+        dispatch(login(userState))
         // navigate("/course")
     }
+
 
     return(
         <Form onSubmit={e => formSubmit(e)}>
