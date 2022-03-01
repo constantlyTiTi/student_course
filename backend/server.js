@@ -17,4 +17,7 @@ app.use('/authen',authenRouter )
 const courseRouter = require('./routes/course-router')
 app.use('/course',courseRouter )
 
+const studentRouter = require('./routes/student-router')
+app.use('/student',studentRouter )
+
 app.listen(5000,()=> console.log('Server Started'))

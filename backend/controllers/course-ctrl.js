@@ -16,11 +16,11 @@ createCourse = async (req, res) => {
         return res.status(400).json({ success: false, error: err })
     }
 
-    course.save()
-    .then(()=>{
+    await course.save()
+    .then((item)=>{
         return res.status(201).json({
             success: true,
-            id: movie._id,
+            id: item._id,
             message: 'Course created!',
         })
     })
@@ -76,17 +76,19 @@ addStudentToCourse = async (req, res) => {
 }
 
 getCourseList =async (req, res) => {
-    await Course.find({}, (err, courses) => {
+
+    await Course.find({}, (err, items) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
         }
-        if (!courses.length) {
+        if (!items.length) {
             return res
                 .status(404)
-                .json({ success: false, error: `Course not found` })
+                .json({ success: false, error: `Movie not found` })
         }
-        return res.status(200).json({ success: true, data: courses })
+        return res.status(200).json({ success: true, data: items })
     }).catch(err => console.log(err))
+
 }
 
 deleteCourse =async (req, res) => {
@@ -115,7 +117,7 @@ updateCourse =async (req, res) => {
         })
     }
 
-    Course.findOne({ _id: req.params.courseId }, (err, course) => {
+    Course.findOne({ course_code: body.course_code }, (err, course) => {
         if (err) {
             return res.status(404).json({
                 err,
