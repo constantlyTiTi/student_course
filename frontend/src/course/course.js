@@ -2,41 +2,57 @@ import React, { useEffect, useState } from "react";
 import { Card, Button, Form, Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { getCourse, setCourseInfo } from "../redux/course-redux";
+import { getCoursesByCode, addCourseToStudent, addStudentToCourse } from "../redux/course-redux";
 
 const Course = (props) => {
-  const { course, loading } = useSelector((state) => state.course);
+  const { courses, loading } = useSelector((state) => state.course);
+  const { user, token } = useSelector((state) => state.user);
+  let selectedSection = "";
   const dispatch = useDispatch();
-  const { code } = useParams();
+  const { course_code } = useParams();
   useEffect(() => {
-    const getCourse = async (code) => {
-      const courseWithStudents = await dispatch(getCourse(code));
+    const getCourse = async (course_code) => {
+      let result = await dispatch(getCoursesByCode(course_code));
     };
-    console.log(code);
-    if(code!==course?.course_code)getCourse(code);
-  }, [code, course?.course_code, dispatch]);
+    getCourse(course_code)
+  }, []);
 
+  function setSelectedSection(id){
+    selectedSection = id
+  }
+
+  function addCourseStudent(){
+
+    const runFunc = async ()=>{
+      if(selectedSection){
+        await dispatch(addCourseToStudent({"course_id":selectedSection, "student_id":user._id, "token": token}))
+        await dispatch(addStudentToCourse({"course_id":selectedSection, "student_id":user._id, "token": token}))
+      }
+    };
+
+    runFunc()
+  }
   const navigate = useNavigate();
-  if(loading) return <Spinner animation="border" role="status" />
+  if (loading || courses?.length === 0) return <Spinner animation="border" role="status" />
   return (
     <Card>
-      <Card.Header>{course.course_name}</Card.Header>
+      <Card.Header>{courses[0].course_name}</Card.Header>
       <Card.Body>
         {/* <Card.Title>Special title treatment</Card.Title> */}
         <Card.Text>
           <Form>
-            {course.section.map((section) => (
-              <div key={`default-${section}`} className="mb-3">
-                <Form.Check
-                  type="radio"
-                  id={`default-${section}`}
-                  label={section}
-                />
-              </div>
-            ))}
+            {
+
+              courses.map(i =>
+              (
+                <Form.Check type="radio" name={i.course_code} 
+                value={i._id} label={`${i.students.some(s => s._id == user._id) ? "default" : ""} ${i.section}`} 
+                onClick={()=>setSelectedSection(i._id)}/>
+              ))
+            }
           </Form>
         </Card.Text>
-        <Button variant="primary">Add Course</Button>
+        <Button variant="primary" onClick={()=> addCourseStudent()}>Add Course</Button>
       </Card.Body>
     </Card>
   );

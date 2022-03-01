@@ -20,10 +20,11 @@ export const createCourseAPI= (course)=>{
         }
     })
 }
-export const deleteCourseAPI= (course_id)=>{
-    return axios.delete(`/course/${course_id}`,{
+export const deleteCourseAPI= (course_id,student_id, token)=>{
+    return axios.delete(`/course/${course_id}/student/${student_id}`,{
         headers:{
-            "Content-Type": "Application/json"
+            "Content-Type": "Application/json",
+            "Authorization":`Bearer ${token}`
         }
     })
 }
@@ -43,6 +44,14 @@ export const getCourseApi = (course_id) => {
     })
 }
 
+export const getCourseByCodeApi = (course_code) => {
+    return axios.get(`/course/course_code/${course_code}`,{
+        headers:{
+            "Content-Type": "Application/json"
+        }
+    })
+}
+
 export const getCoursesApi = () => {
     return axios.get("/course/courses/all",{
         headers:{
@@ -55,15 +64,25 @@ export const getStudentCoursesApi = (student_id, token) => {
     return axios.get(`/student/${student_id}/studentCourseList`,{
         headers:{
             "Content-Type": "Application/json",
-            "Authentication":`Beare ${token}`
+            "Authorization":`Bearer ${token}`
         }
     })
 }
 
-export const addStudentToCourseApi = (course_id, student_id) => {
-    return axios.put(`/course/${course_id}/student_number/${student_id}`,{
+export const addStudentToCourseApi = (course_id, student_id, token) => {
+    return axios.put(`/course/${course_id}/student_id/${student_id}`,{
         headers:{
-            "Content-Type": "Application/json"
+            "Content-Type": "Application/json",
+            "Authorization":`Bearer ${token}`
+        }
+    })
+}
+
+export const addCourseToStudentApi = (course_id, student_id, token) => {
+    return axios.put(`/student/${student_id}/course_id/${course_id}`,{
+        headers:{
+            "Content-Type": "Application/json",
+            "Authorization":`Bearer ${token}`
         }
     })
 }

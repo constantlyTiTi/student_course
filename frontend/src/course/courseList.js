@@ -8,6 +8,7 @@ import {Course} from '../models/course'
 const CourseList =()=> {
     const courses = useSelector((state) => state.course.courses)
     const loading = useSelector((state) => state.course.loading)
+    const token = useSelector((state) => state.user.token)
     const dispatch = useDispatch()
     const navigate = useNavigate()
     console.log(courses, loading)
@@ -28,16 +29,16 @@ const CourseList =()=> {
             <tr>
               <th>Course Code</th>
               <th>Course Name</th>
-              <th>Section</th>
               <th>Semester</th>
             </tr>
           </thead>
           <tbody>
             {courses.map((c) => (
               <tr>
-                <td><NavLink to={`course/${c.course_code}`}>{c.course_code}</NavLink></td>
+                {
+                  token?(<td><NavLink to={`course/${c.course_code}`}>{c.course_code}</NavLink></td>):(<td>{c.course_code}</td>)
+                }
                 <td>{c.course_name}</td>
-                <td>{c.section}</td>
                 <td>{c.semester}</td>
               </tr>
             ))}

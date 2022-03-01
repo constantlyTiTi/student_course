@@ -1,110 +1,139 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { createCourseAPI, deleteCourseAPI, updateCourseApi, getCourseApi, getCoursesApi, addStudentToCourseApi, getStudentCoursesApi } from './api'
+import {
+	createCourseAPI, deleteCourseAPI, updateCourseApi,
+	getCourseApi, getCoursesApi, addStudentToCourseApi, getStudentCoursesApi, getCourseByCodeApi,addCourseToStudentApi
+} from './api'
 
 export const createCourse = createAsyncThunk(
-    'createCourse',
-    async (courseState, thunkAPI) => {
-        const response = await createCourseAPI(courseState)
+	'createCourse',
+	async (courseState, thunkAPI) => {
+		const response = await createCourseAPI(courseState)
 
-        if (response.status !== 200) {
-            return thunkAPI.rejectWithValue(response);
-        }
+		if (response.status !== 200) {
+			return thunkAPI.rejectWithValue(response);
+		}
 
-        return response.data
-    }
+		return response.data
+	}
 
 )
 
 export const updateCourse = createAsyncThunk(
-    'updateCourse',
-    async (courseState, thunkAPI) => {
-        const response = await updateCourseApi(courseState)
+	'updateCourse',
+	async (courseState, thunkAPI) => {
+		const response = await updateCourseApi(courseState)
 
-        if (response.status !== 200) {
-            return thunkAPI.rejectWithValue(response);
-        }
+		if (response.status !== 200) {
+			return thunkAPI.rejectWithValue(response);
+		}
 
-        return response.data
-    }
+		return response.data
+	}
 
 )
 
 export const deleteCourse = createAsyncThunk(
-    'deleteCourse',
-    async (course_code, thunkAPI) => {
-        const response = await deleteCourseAPI(course_code)
+	'deleteCourse',
+	async ({ course_id, student_id, token }, thunkAPI) => {
+		const response = await deleteCourseAPI(course_id, student_id, token)
 
-        if (response.status !== 200) {
-            return thunkAPI.rejectWithValue(response);
-        }
+		if (response.status !== 200) {
+			return thunkAPI.rejectWithValue(response);
+		}
 
-        return response.data
-    }
+		return response.data
+	}
 
 )
 
 export const getCourse = createAsyncThunk(
-    'getCourse',
-    async (course_code, thunkAPI) => {
-        const response = await getCourseApi(course_code)
+	'getCourse',
+	async (course_id, thunkAPI) => {
+		const response = await getCourseApi(course_id)
 
-        if (response.status !== 200) {
-            return thunkAPI.rejectWithValue(response);
-        }
+		if (response.status !== 200) {
+			return thunkAPI.rejectWithValue(response);
+		}
 
-        return response.data
-    }
+		return response.data
+	}
+
+)
+
+export const getCoursesByCode = createAsyncThunk(
+	'getCoursesByCode',
+	async (course_code, thunkAPI) => {
+		const response = await getCourseByCodeApi(course_code)
+
+		if (response.status !== 200) {
+			return thunkAPI.rejectWithValue(response);
+		}
+
+		return response.data
+	}
 
 )
 
 export const getCourses = createAsyncThunk(
-    'getCourses',
-    async (course_code, thunkAPI) => {
-        const response = await getCoursesApi()
+	'getCourses',
+	async (course_code, thunkAPI) => {
+		const response = await getCoursesApi()
 
-        if (response.status !== 200) {
-            return thunkAPI.rejectWithValue(response);
-        }
-        return response.data
-    }
+		if (response.status !== 200) {
+			return thunkAPI.rejectWithValue(response);
+		}
+		return response.data
+	}
 
 )
 
 export const getStudentCourses = createAsyncThunk(
-    'getStudentCourses',
-    async (student_id, token, thunkAPI) => {
-        const response = await getStudentCoursesApi(student_id, token)
+	'getStudentCourses',
+	async ({ student_id, token }, thunkAPI) => {
+		const response = await getStudentCoursesApi(student_id, token)
 
-        if (response.status !== 200) {
-            return thunkAPI.rejectWithValue(response);
-        }
-        return response.data
-    }
+		if (response.status !== 200) {
+			return thunkAPI.rejectWithValue(response);
+		}
+		return response.data
+	}
 
 )
 
 
 export const addStudentToCourse = createAsyncThunk(
-    'getCourses',
-    async (course_code,student_number, thunkAPI) => {
-        const response = await addStudentToCourseApi(course_code, student_number)
+	'addStudentToCourse',
+	async ({course_id, student_id}, thunkAPI) => {
+		const response = await addStudentToCourseApi(course_id, student_id)
 
-        if (response.status !== 200) {
-            return thunkAPI.rejectWithValue(response);
-        }
+		if (response.status !== 200) {
+			return thunkAPI.rejectWithValue(response);
+		}
 
-        return response.data
-    }
+		return response.data
+	}
 
 )
 
+export const addCourseToStudent = createAsyncThunk(
+	'addCourseToStudent',
+	async ({course_id, student_id}, thunkAPI) => {
+		const response = await addCourseToStudentApi(course_id, student_id)
 
+		if (response.status !== 200) {
+			return thunkAPI.rejectWithValue(response);
+		}
 
-const initialState =  {
+		return response.data
+	}
+
+)
+
+const initialState = {
 	course: {},
-    courses: [],
-    loading: true,
-    errors: []
+	courses: [],
+	loading: true,
+	errors: []
 }
 
 const courseSlice = createSlice({
@@ -147,7 +176,7 @@ const courseSlice = createSlice({
 			state.errors = action.payload.data.errors
 			state.loading = false
 		}),
-        builder.addCase(deleteCourse.fulfilled, (state, action) => {
+		builder.addCase(deleteCourse.fulfilled, (state, action) => {
 			state.courses = [action.payload.data]
 			state.token = action.payload.data.token
 			state.loading = false
@@ -161,7 +190,7 @@ const courseSlice = createSlice({
 			state.errors = action.payload.data.errors
 			state.loading = false
 		}),
-        builder.addCase(getCourse.fulfilled, (state, action) => {
+		builder.addCase(getCourse.fulfilled, (state, action) => {
 			state.course = action.payload.data
 			state.token = action.payload.data.token
 			state.loading = false
@@ -170,12 +199,43 @@ const courseSlice = createSlice({
 		builder.addCase(getCourse.pending, (state) => {
 			state.loading = true
 		}),
+		builder.addCase(getCoursesByCode.rejected, (state, action) => {
+			state.errors = action.payload.data.errors
+			state.loading = false
+		}),
+		builder.addCase(getCoursesByCode.fulfilled, (state, action) => {
+			state.courses = action.payload.data
+			state.token = action.payload.data.token
+			state.loading = false
+			state.errors = initialState.errors
+		}),
+		builder.addCase(getCoursesByCode.pending, (state) => {
+			state.loading = true
+		}),
 		builder.addCase(getCourse.rejected, (state, action) => {
 			state.errors = action.payload.data.errors
 			state.loading = false
 		}),
-        builder.addCase(getCourses.fulfilled, (state, action) => {
-			state.courses = action.payload.data
+		builder.addCase(getCourses.fulfilled, (state, action) => {
+			state.courses = action.payload.data.reduce((p, c) => {
+				const code = p.find(e => e.course_code === c.course_code);
+				if (!!code) {
+					code.section.push(c.section)
+				} else {
+					c.section = [c.section]
+					p.push(c) 
+				}
+				// if (p.some(e=>e.course_code===c.course_code)) {
+				// 	c.section = [c.section]
+				// 	p.push(c)
+				// }
+
+				// group["course_name"] = c.course_name
+				// group["semester"] = c.semester
+				// group["section"] = group["section"] ?? []
+				// group["section"].push(c.section)
+				return p
+			}, [])
 			state.token = action.payload.data.token
 			state.loading = false
 			state.errors = initialState.errors
@@ -189,6 +249,7 @@ const courseSlice = createSlice({
 			state.loading = false
 		}),
 		builder.addCase(getStudentCourses.fulfilled, (state, action) => {
+			console.log(action.payload.data)
 			state.courses = action.payload.data
 			state.loading = false
 			state.errors = initialState.errors

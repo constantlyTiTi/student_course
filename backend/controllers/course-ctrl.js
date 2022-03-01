@@ -1,5 +1,6 @@
 const Course = require('../models/course')
 const jwt = require("jsonwebtoken")
+const { Student } = require('../models/student')
 
 createCourse = async (req, res) => {
 
@@ -39,6 +40,26 @@ getCourse = async (req, res) => {
         return res.status(400).json({ success: false, error: "not found" })
     }
     return res.status(200).json({ success: true, data: result })
+}
+
+getCourseStudentList = async (req, res) => {
+    
+}
+
+getCourseByCode = async (req, res) => {
+
+    Course.find({ course_code: req.params.course_code }).then(
+        items => {
+            if (!items.length) {
+                return res
+                    .status(404)
+                    .json({ success: false, error: `Course not found` })
+            }
+            res.status(200).json({ success: true, data: items })
+        }
+    ).catch(
+        err => console.log(err)
+    )
 }
 
 addStudentToCourse = async (req, res) => {
@@ -110,16 +131,36 @@ deleteCourse = async (req, res) => {
         }
         return res.status(400).end()
     }
-    Course.findOneAndDelete({ _id: req.params.course_id }, function (err, docs) {
-        if (err) {
-            return res
-                .status(400)
-                .json({ success: false, error: err })
-        }
-        else {
-            return res.status(200).json({ success: true, data: docs })
-        }
-    });
+
+    try{
+    let course = await Course.findOne({ _id: req.params.course_id })
+
+    if(!course){
+        return res.status(500).json({ error:"course not find" })
+    }
+
+    let index =  course.students.indexof(req.params.student_id)
+    if(index > -1){
+        course.students.splice(index, 1)
+    }
+
+    course.save()
+
+    let std = await Student.findOne({_id:req.params.student_id})
+
+    let indexS =  course.students.indexof(req.params.course_id)
+    if(index > -1){
+        std.courses.splice(indexS, 1)
+    }
+    std.save()
+    return res.status(200).json({ success:true })
+}
+catch (e){
+    return res.status(400).json({ error:e })
+}
+
+
+
 }
 
 updateCourse = async (req, res) => {
@@ -177,5 +218,6 @@ module.exports = {
     getCourseList,
     deleteCourse,
     updateCourse,
-    addStudentToCourse
+    addStudentToCourse,
+    getCourseByCode
 }

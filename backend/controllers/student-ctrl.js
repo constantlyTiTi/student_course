@@ -1,4 +1,5 @@
 const Student = require('../models/student')
+const Course = require('../models/course')
 const jwt = require("jsonwebtoken")
 studentCourseList = async (req, res) => {
     try{
@@ -17,7 +18,11 @@ studentCourseList = async (req, res) => {
             return res.status(400).json({ success: false, error: "not found" })
         }
 
-        return res.status(200).json({ success: true, data: result.courses })
+        let courseIds = result.courses
+
+        let courses = await Course.find({'_id': courseIds})
+
+        return res.status(200).json({ success: true, data: courses })
     } catch (e) {
         console.log(e)
     }

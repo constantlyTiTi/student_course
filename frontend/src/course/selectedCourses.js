@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Table, Button, FloatingLabel, Spinner } from "react-bootstrap";
+import { Table, Button, FloatingLabel, Spinner, Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { Course } from "../models/course";
-import { getStudentCourses } from '../redux/course-redux'
+import { getStudentCourses, deleteCourse,addCourseToStudent, addStudentToCourse  } from '../redux/course-redux'
 
 const SelectedCourses = () => {
 
@@ -12,14 +12,21 @@ const SelectedCourses = () => {
   const token = useSelector((state) => state.user.token)
   const loading = useSelector((state) => state.course.loading)
   const dispatch = useDispatch()
-  const navigate = useNavigate()
-  console.log(user, loading)
+
+  console.log(token, loading)
   useEffect(() => {
-    if (courses?.length === 0) {
-      dispatch(getStudentCourses(user._id, token))
-    }
+
+    dispatch(getStudentCourses({ student_id: user._id, token: token }))
 
   }, [])
+
+  const dropCourse = (courseId) => {
+    dispatch(deleteCourse({ "course_id": courseId, "student_id": user._id, "token": token }))
+  }
+
+  const editCourse = (code)=>{
+
+  }
 
   if (!courses || loading) {
     return <Spinner animation="border" role="status" />
@@ -39,9 +46,14 @@ const SelectedCourses = () => {
         {courses.map((c) => (
           <tr>
             <td>{c.course_code}</td>
-            <td>{c.crouse_name}</td>
+            <td>{c.course_name}</td>
             <td>{c.section}</td>
-            <td>{c.semester}</td>
+            <td><Button className="btn btn-danger" onClick={() => dropCourse(c._id)}>Drop</Button></td>
+            <td>
+            {
+                  token?(<td><NavLink to={`course/${c.course_code}`}>Edit</NavLink></td>):(<td>{c.course_code}</td>)
+                }
+                </td>
           </tr>
         ))}
       </tbody>
