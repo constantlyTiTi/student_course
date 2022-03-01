@@ -106,8 +106,9 @@ export const addStudentToCourse = createAsyncThunk(
 
 
 const initialState =  {
-    courses:[],
-    loading: false,
+	course: {},
+    courses: [],
+    loading: true,
     errors: []
 }
 
@@ -166,7 +167,7 @@ const courseSlice = createSlice({
 			state.loading = false
 		}),
         builder.addCase(getCourse.fulfilled, (state, action) => {
-			state.courses = [action.payload.data.course]
+			state.course = action.payload.data.course
 			state.token = action.payload.data.token
 			state.loading = false
 			state.errors = initialState.errors
@@ -175,7 +176,8 @@ const courseSlice = createSlice({
 			state.loading = true
 		}),
 		builder.addCase(getCourse.rejected, (state, action) => {
-			// Add user to the state array
+			
+			state.course = {course_name:"course_name",course_code:"course_code",section:[12,34,56]}
 			state.errors = action.payload.data.errors
 			state.loading = false
 		}),

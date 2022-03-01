@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { Form, Button, FloatingLabel } from "react-bootstrap"
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate ,useLocation} from 'react-router-dom';
 import {setUserInfo} from '../redux/auth-redux'
 import {Student} from '../models/student'
+import {useAuth} from '../auth/useAuth'
 
 const Login = (props) => {
     const user = useSelector((state) => state.user.value)
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const location = useLocation()
+    let auth = useAuth()
 
     const[userState, setState] = useState(Student)
 
@@ -20,11 +23,12 @@ const Login = (props) => {
         setState({...userState, password:passwordInput})
         console.log(userState)
     }
-
+    let from = location.state?.from?.pathname || "/";
     const formSubmit =(e)=>{
         e.preventDefault()
         dispatch(setUserInfo(userState))
-        navigate("/course")
+        navigate(from, { replace: true });
+        // navigate("/course")
     }
 
     return(
