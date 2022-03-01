@@ -43,18 +43,21 @@ getCourse = async (req, res) => {
 }
 
 addStudentToCourse = async (req, res) => {
-    let courseGet = {}
-    await Course.findOne({ course_code: req.params.course_code, student_number:req.params.student_number}, (err, course) => {
-        if (err) {
-            return res.status(400).json({ success: false, error: err })
-        }
-        if(course.students.includes(student_number)){
-            return res.status(400).json({ success: false,  message: 'already exist' })
-        }
-       
-        course.students.push(student_number)
+    let course = await Course.findOne({ course_code: req.params.course_code})
+
+    if(!course){
+        return res.status(400).json({ success: false, error: "not found" })
+    }
+
+    let student_number = req.params.student_number
+
+    if(course.students.includes(student_number)){
+        return res.status(400).json({ success: false,  message: 'already exist' })
+    }
+
+    course.students.push(student_number)
         
-        course
+     await course
             .save()
             .then(() => {
                 return res.status(200).json({
@@ -69,14 +72,11 @@ addStudentToCourse = async (req, res) => {
                     message: 'Course not updated!',
                 })
             })
-    }).catch(err => console.log(err))
-
-    courseGet.students.push(student_number)
 
 }
 
 getCourseList =async (req, res) => {
-
+    
     await Course.find({}, (err, items) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
@@ -84,7 +84,7 @@ getCourseList =async (req, res) => {
         if (!items.length) {
             return res
                 .status(404)
-                .json({ success: false, error: `Movie not found` })
+                .json({ success: false, error: `Course not found` })
         }
         return res.status(200).json({ success: true, data: items })
     }).catch(err => console.log(err))
