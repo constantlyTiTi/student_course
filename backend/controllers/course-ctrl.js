@@ -1,6 +1,6 @@
 const Course = require('../models/course')
 
-createCourse = (req, res) => {
+createCourse = async (req, res) => {
     const body = req.body
     if(!body){
         return res.status(400).json({
@@ -31,7 +31,7 @@ createCourse = (req, res) => {
     })
 }
 
-getCourse = (req, res) => {
+getCourse = async (req, res) => {
     await Course.findOne({ course_code: req.params.course_code }, (err, course) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
@@ -41,7 +41,7 @@ getCourse = (req, res) => {
     }).catch(err => console.log(err))
 }
 
-addStudentToCourse = (req, res) => {
+addStudentToCourse = async (req, res) => {
     let courseGet = {}
     await Course.findOne({ course_code: req.params.course_code, student_number:req.params.student_number}, (err, course) => {
         if (err) {
@@ -74,7 +74,7 @@ addStudentToCourse = (req, res) => {
 
 }
 
-getCourseList = (req, res) => {
+getCourseList =async (req, res) => {
     await Course.find({}, (err, courses) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
@@ -88,7 +88,7 @@ getCourseList = (req, res) => {
     }).catch(err => console.log(err))
 }
 
-deleteCourse = (req, res) => {
+deleteCourse =async (req, res) => {
     await Course.findOneAndDelete({ course_code: req.params.course_code }, (err, course) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
@@ -104,7 +104,7 @@ deleteCourse = (req, res) => {
     }).catch(err => console.log(err))
 }
 
-updateCourse = (req, res) => {
+updateCourse =async (req, res) => {
     const body = req.body
 
     if (!body) {

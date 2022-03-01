@@ -4,7 +4,7 @@ const authenCtrl = require('../controllers/authentication-ctrl')
 
 const router = express.Router()
 
-router.post('/authen/register', authenCtrl.signUp)
-router.post('/authen/login', authenCtrl.login)
+router.post('/signup', authenCtrl.signUp)
+router.post('/login', authenCtrl.login)
 
 module.exports = router

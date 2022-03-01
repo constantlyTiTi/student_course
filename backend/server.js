@@ -1,6 +1,7 @@
 require('dotenv').config()
 const express = require('express')
 const mongoose = require('mongoose')
+var bcrypt = require('bcryptjs');
 const app = express()
 
 mongoose.connect(process.env.DATABASE_URL)
@@ -13,7 +14,7 @@ app.use(express.json())
 const authenRouter = require('./routes/authen-router')
 app.use('/authen',authenRouter )
 
-// const courseRouter = require('./routes/course-router')
-// app.use('/course',courseRouter )
+const courseRouter = require('./routes/course-router')
+app.use('/course',courseRouter )
 
 app.listen(5000,()=> console.log('Server Started'))

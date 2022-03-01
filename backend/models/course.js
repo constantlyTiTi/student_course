@@ -7,9 +7,9 @@ const Course = new Schema(
         course_name: { type: String, required: true },
         section: { type: String, required: true },
         semester: { type: String, required: true },
-        students: [object] 
+        students: [{type:String}]
     },
     { timestamps: true },
 )
 
-module.exports = mongoose.model('student', Course)
+module.exports = mongoose.model('course', Course)

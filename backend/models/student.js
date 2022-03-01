@@ -10,8 +10,9 @@ const Student = new Schema(
         city: { type: String, required: true },
         phone_number: { type: String, required: true },
         email: { type: String, required: true },
+        password: { type: String, required: true },
         program: { type: String, required: true },
-        courses:[object]
+        courses:[{type:String}]
     },
     { timestamps: true },
 )
