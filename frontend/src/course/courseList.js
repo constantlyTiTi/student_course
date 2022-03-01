@@ -38,15 +38,16 @@ import {Course} from '../models/course'
 //     },
 //   ];
 const CourseList =()=> {
-    const courses = useSelector((state) => state.courses)
-    const loading = useSelector((state) => state.loading)
+    const courses = useSelector((state) => state.course.courses)
+    const loading = useSelector((state) => state.course.loading)
     const dispatch = useDispatch()
     const navigate = useNavigate()
     console.log(courses, loading)
     useEffect (()=>{
+      if(courses?.length === 0){
         dispatch(getCourses()) 
-        
-
+      }
+       
     }, [])
 
     if(!courses || loading){
@@ -66,9 +67,9 @@ const CourseList =()=> {
           <tbody>
             {courses.map((c) => (
               <tr>
-                <td><NavLink to={`course/${c.code}`}>{c.code}</NavLink></td>
-                <td>{c.name}</td>
-                <td>{c.section.join(" / ")}</td>
+                <td><NavLink to={`course/${c.course_code}`}>{c.course_code}</NavLink></td>
+                <td>{c.course_name}</td>
+                <td>{c.section}</td>
                 <td>{c.semester}</td>
               </tr>
             ))}
