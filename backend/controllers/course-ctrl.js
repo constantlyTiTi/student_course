@@ -33,29 +33,27 @@ createCourse = async (req, res) => {
 }
 
 getCourse = async (req, res) => {
-    await Course.findOne({ course_code: req.params.course_code }, (err, course) => {
-        if (err) {
-            return res.status(400).json({ success: false, error: err })
-        }
-
-        return res.status(200).json({ success: true, data: course })
-    }).catch(err => console.log(err))
+    let result = await Course.findOne({ _id: req.params.course_id })
+    if(!result){
+        return res.status(400).json({ success: false, error: "not found" }) 
+    }
+    return res.status(200).json({ success: true, data: result })
 }
 
 addStudentToCourse = async (req, res) => {
-    let course = await Course.findOne({ course_code: req.params.course_code})
+    let course = await Course.findOne({ _id: req.params.course_id})
 
     if(!course){
         return res.status(400).json({ success: false, error: "not found" })
     }
 
-    let student_number = req.params.student_number
+    let student_id = req.params.student_id
 
-    if(course.students.includes(student_number)){
+    if(course.students.some(i=>i._id === student_id)){
         return res.status(400).json({ success: false,  message: 'already exist' })
     }
 
-    course.students.push(student_number)
+    course.students.push(student_id)
         
      await course
             .save()
@@ -92,7 +90,7 @@ getCourseList =async (req, res) => {
 }
 
 deleteCourse =async (req, res) => {
-    Course.findOneAndDelete({course_code: req.params.course_code }, function (err, docs) {
+    Course.findOneAndDelete({_id: req.params.course_id }, function (err, docs) {
         if (err){
             return res
                     .status(400)
@@ -114,7 +112,7 @@ updateCourse =async (req, res) => {
         })
     }
 
-    Course.findOne({ course_code: body.course_code }, (err, course) => {
+    Course.findOne({ _id: body.course_id }, (err, course) => {
         if (err) {
             return res.status(404).json({
                 err,
