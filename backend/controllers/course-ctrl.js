@@ -48,7 +48,7 @@ addStudentToCourse = async (req, res) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
         }
-        if(course.students.contains(student_number)){
+        if(course.students.includes(student_number)){
             return res.status(400).json({ success: false,  message: 'already exist' })
         }
        
