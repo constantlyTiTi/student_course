@@ -2,6 +2,7 @@ const Course = require('../models/course')
 const jwt = require("jsonwebtoken")
 
 createCourse = async (req, res) => {
+    
     const body = req.body
     if(!body){
         return res.status(400).json({
@@ -41,6 +42,16 @@ getCourse = async (req, res) => {
 }
 
 addStudentToCourse = async (req, res) => {
+   
+    try{
+        var token = req.headers.authorization.split(' ')[1];
+        jwt.verify(token, process.env.JWT_SECRET)
+    }catch(e){
+        if (e instanceof jwt.JsonWebTokenError) {
+			return res.status(401).end()
+		}
+		return res.status(400).end()
+    }
     let course = await Course.findOne({ _id: req.params.course_id})
 
     if(!course){
@@ -90,6 +101,15 @@ getCourseList =async (req, res) => {
 }
 
 deleteCourse =async (req, res) => {
+    try{
+        var token = req.headers.authorization.split(' ')[1];
+        jwt.verify(token, process.env.JWT_SECRET)
+    }catch(e){
+        if (e instanceof jwt.JsonWebTokenError) {
+			return res.status(401).end()
+		}
+		return res.status(400).end()
+    }
     Course.findOneAndDelete({_id: req.params.course_id }, function (err, docs) {
         if (err){
             return res
@@ -103,6 +123,15 @@ deleteCourse =async (req, res) => {
 }
 
 updateCourse =async (req, res) => {
+    try{
+        var token = req.headers.authorization.split(' ')[1];
+        jwt.verify(token, process.env.JWT_SECRET)
+    }catch(e){
+        if (e instanceof jwt.JsonWebTokenError) {
+			return res.status(401).end()
+		}
+		return res.status(400).end()
+    }
     const body = req.body
 
     if (!body) {

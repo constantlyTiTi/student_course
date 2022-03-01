@@ -1,6 +1,15 @@
 const Student = require('../models/student')
 
 studentCourseList = async (req, res) => {
+    try{
+        var token = req.headers.authorization.split(' ')[1];
+        jwt.verify(token, process.env.JWT_SECRET)
+    }catch(e){
+        if (e instanceof jwt.JsonWebTokenError) {
+			return res.status(401).end()
+		}
+		return res.status(400).end()
+    }
 
     try {
         let result = await Student.findOne({ _id: req.params.student_id })
@@ -16,6 +25,15 @@ studentCourseList = async (req, res) => {
 }
 
 addCourseToStudent = async (req, res) => {
+    try{
+        var token = req.headers.authorization.split(' ')[1];
+        jwt.verify(token, process.env.JWT_SECRET)
+    }catch(e){
+        if (e instanceof jwt.JsonWebTokenError) {
+			return res.status(401).end()
+		}
+		return res.status(400).end()
+    }
 
     let student = await Student.findOne({ _id: req.params.student_id })
 
