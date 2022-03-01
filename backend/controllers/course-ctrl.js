@@ -1,4 +1,5 @@
 const Course = require('../models/course')
+const jwt = require("jsonwebtoken")
 
 createCourse = async (req, res) => {
     const body = req.body
