@@ -41,13 +41,13 @@ signUp = async (req, res) => {
 
         return res.status(201).json({
             success: true,
-            id: result._id,
+            student: result,
             message: 'sign up successfully',
             token: token
         })
     } catch (e) {
         console.log(e)
-        return res.status(500).json({ msg: "Token not generated" })
+        return res.status(500).json({ error: "Token not generated" })
     }
 }
 

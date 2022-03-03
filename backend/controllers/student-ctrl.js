@@ -1,6 +1,7 @@
 const Student = require('../models/student')
 const Course = require('../models/course')
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
+const student = require('../models/student');
 studentCourseList = async (req, res) => {
     try{
         var token = req.headers.authorization.split(' ')[1];
@@ -37,7 +38,7 @@ addCourseToStudent = async (req, res) => {
         if (e instanceof jwt.JsonWebTokenError) {
 			return res.status(401).end()
 		}
-		return res.status(400).end()
+		return res.status(400).json({error:e.message})
     }
 
     let student = await Student.findOne({ _id: req.params.student_id })
@@ -59,7 +60,32 @@ addCourseToStudent = async (req, res) => {
         })
 }
 
+getCourseStudentList = async (req, res) => {
+    try{
+        let students = await Student.find()
+        console.log(students, req.params.course_id)
+    let filteredStudents = students.filter(s=>s.courses.includes(req.params.course_id))
+    return res.status(200).send(filteredStudents)
+    }
+    catch(e){
+        return res.status(400).send(e)
+    }
+
+    }
+
+    getStudentList = async(req, res) => {
+        try{
+            let students = await Student.find()
+            return res.status(200).send(students) 
+        }catch(e){
+            return res.status(400).send(e)
+        }
+    }
+    
+
 module.exports = {
     studentCourseList,
     addCourseToStudent,
+    getCourseStudentList,
+    getStudentList
 }

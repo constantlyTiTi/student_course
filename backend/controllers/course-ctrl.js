@@ -1,6 +1,6 @@
 const Course = require('../models/course')
 const jwt = require("jsonwebtoken")
-const { Student } = require('../models/student')
+const Student = require('../models/student')
 
 createCourse = async (req, res) => {
 
@@ -40,10 +40,6 @@ getCourse = async (req, res) => {
         return res.status(400).json({ success: false, error: "not found" })
     }
     return res.status(200).json({ success: true, data: result })
-}
-
-getCourseStudentList = async (req, res) => {
-    
 }
 
 getCourseByCode = async (req, res) => {
@@ -129,35 +125,36 @@ deleteCourse = async (req, res) => {
         if (e instanceof jwt.JsonWebTokenError) {
             return res.status(401).end()
         }
-        return res.status(400).end()
+        return res.status(400).json({ error: e.message })
     }
 
-    try{
-    let course = await Course.findOne({ _id: req.params.course_id })
+    try {
+        let course = await Course.findOne({ _id: req.params.course_id })
 
-    if(!course){
-        return res.status(500).json({ error:"course not find" })
+        if (!course) {
+            return res.status(500).json({ error: "course not find" })
+        }
+
+        let index = course.students.indexOf(req.params.student_id);
+        if (index > -1) {
+            course.students.splice(index, 1);
+        }
+
+        await course.save()
+
+        let std = await Student.findOne({ _id: req.params.student_id })
+
+        let indexS = std.courses.indexOf(req.params.course_id)
+        console.log(indexS)
+        if (indexS > -1) {
+            std.courses.splice(indexS, 1)
+        }
+        await std.save()
+        return res.status(200).json({ success: true })
     }
-
-    let index =  course.students.indexof(req.params.student_id)
-    if(index > -1){
-        course.students.splice(index, 1)
+    catch (e) {
+        return res.status(400).json({ error: e.message })
     }
-
-    course.save()
-
-    let std = await Student.findOne({_id:req.params.student_id})
-
-    let indexS =  course.students.indexof(req.params.course_id)
-    if(index > -1){
-        std.courses.splice(indexS, 1)
-    }
-    std.save()
-    return res.status(200).json({ success:true })
-}
-catch (e){
-    return res.status(400).json({ error:e })
-}
 
 
 

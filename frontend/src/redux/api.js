@@ -7,7 +7,7 @@ export const loginAPI = (userState)=>{
     })
 }
 export const signUpAPI = (userState)=>{
-    return axios.post("",userState,{
+    return axios.post("/authen/signup",userState,{
         headers:{
             "Content-Type": "Application/json"
         }
@@ -70,19 +70,37 @@ export const getStudentCoursesApi = (student_id, token) => {
 }
 
 export const addStudentToCourseApi = (course_id, student_id, token) => {
-    return axios.put(`/course/${course_id}/student_id/${student_id}`,{
+    return axios.put(`/course/${course_id}/student_id/${student_id}`,{},{
         headers:{
             "Content-Type": "Application/json",
-            "Authorization":`Bearer ${token}`
+            abc:"sadfasdasdfasdfasdf",
+            Authorization:`Bearer ${token}`
         }
     })
 }
 
 export const addCourseToStudentApi = (course_id, student_id, token) => {
-    return axios.put(`/student/${student_id}/course_id/${course_id}`,{
+    console.log("api", token)
+    return axios.put(`/student/${student_id}/course_id/${course_id}`,{},{
         headers:{
             "Content-Type": "Application/json",
-            "Authorization":`Bearer ${token}`
+            Authorization:`Bearer ${token}`
+        }
+    })
+}
+
+export const getCourseStudentListApi = (course_id) => {
+    return axios.get(`/student/course_id/${course_id}`,{
+        headers:{
+            "Content-Type": "Application/json"
+        }
+    })
+}
+
+export const getAllStudentsAPI = ()=>{
+    return axios.get(`/student/allstudents`,{
+        headers:{
+            "Content-Type": "Application/json"
         }
     })
 }

@@ -4,7 +4,7 @@ import Login from './auth/login'
 import SignUp from './auth/signup'
 import Course from './course/course'
 import CourseList from './course/courseList'
-import Thankyou from './course/thankyou'
+import ListAllStudents from './course/listAllStudents'
 import { Container, Navbar, Nav, Brand } from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { useEffect, useState } from 'react'
@@ -25,7 +25,7 @@ function App() {
             <Route path="/selectedcourses" element={<SelectedCourses />} />
             <Route path="/course/:course_code" element={<Course />} />
             {/* <Route path="/course-list" element={<CourseList/>}/> */}
-            <Route path="thankyou" element={<Thankyou />} />
+            <Route path="/students" element={<ListAllStudents />} />
           </Route>
         </Routes>
       </Router>
@@ -44,7 +44,11 @@ function Layout() {
             <Navbar.Brand>
               <Link to="/selectedcourses">{user.first_name} {user.last_name}
               </Link>
-              </Navbar.Brand>
+            </Navbar.Brand>
+            <Navbar.Brand>
+              <Link to="/">Home
+              </Link>
+            </Navbar.Brand>
             <Navbar.Brand href="/">log out</Navbar.Brand>
             <Nav path="course-list" element={<CourseList />} />
             <Nav className="me-auto">
@@ -69,9 +73,13 @@ function Layout() {
           <Navbar.Brand>
             <Link to="/signup">
               Sign up</Link></Navbar.Brand>
+          <Navbar.Brand>
+            <Link to="/students">All Students
+            </Link>
+          </Navbar.Brand>
           <Nav path="course-list" element={<CourseList />} />
           <Nav className="me-auto">
-            </Nav>
+          </Nav>
         </Container>
       </Navbar>
       <Container className='mt-3 col-5'>

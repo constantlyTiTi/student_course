@@ -3,7 +3,6 @@ import { Table, Button, FloatingLabel, Spinner } from "react-bootstrap"
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate ,Link, NavLink} from 'react-router-dom';
 import {getCourses} from '../redux/course-redux'
-import {Course} from '../models/course'
 
 const CourseList =()=> {
     const courses = useSelector((state) => state.course.courses)
@@ -30,6 +29,7 @@ const CourseList =()=> {
               <th>Course Code</th>
               <th>Course Name</th>
               <th>Semester</th>
+              <th>Section</th>
             </tr>
           </thead>
           <tbody>
@@ -40,6 +40,7 @@ const CourseList =()=> {
                 }
                 <td>{c.course_name}</td>
                 <td>{c.semester}</td>
+                <td>{c.section.join(' / ')}</td>
               </tr>
             ))}
           </tbody>

@@ -25,7 +25,7 @@ export const register = createAsyncThunk(
         const response = await signUpAPI(userState)
 
 
-        if (response.status !== 200) {
+        if (response.status>= 299) {
             return thunkAPI.rejectWithValue(response);
         }
 
@@ -53,14 +53,14 @@ const userSlice = createSlice({
 		// Add reducers for additional action types here, and handle loading state as needed
 		builder.addCase(register.fulfilled, (state, action) => {
 			// Add user to the state array
-			state.user = action.payload.data
-			state.token = action.payload.data.token
+			state.user = action.payload.student
+			state.token = action.payload.token
 			state.loading = false
 			state.errors = initialState.errors
 		}),
 		builder.addCase(register.rejected, (state, action) => {
 			// Add user to the state array
-			state.errors = action.payload.data.errors
+			state.errors = action.payload.errors
 			state.loading = false
 		}),
 		builder.addCase(register.pending, (state) => {
